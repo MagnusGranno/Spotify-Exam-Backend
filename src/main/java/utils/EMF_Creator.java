@@ -47,7 +47,7 @@ public class EMF_Creator {
             Properties props = new Properties();
             props.setProperty("javax.persistence.jdbc.user", user);
             props.setProperty("javax.persistence.jdbc.password", pw);
-            props.setProperty("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/security_db");
+            props.setProperty("javax.persistence.jdbc.url", connection_str);
             props.setProperty("javax.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
             
             //Sets the production log-level to show only potential problems
