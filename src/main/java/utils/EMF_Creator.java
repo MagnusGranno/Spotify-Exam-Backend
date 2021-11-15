@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -78,5 +80,16 @@ public class EMF_Creator {
             throw ex; 
         }
          return emf;
+    }
+    private static String getDbName() {
+        Properties pomProperties;
+        InputStream is = EMF_Creator.class.getClassLoader().getResourceAsStream("properties-from-pom.properties");
+        pomProperties = new Properties();
+        try {
+            pomProperties.load(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pomProperties.getProperty("db.name");
     }
 }
