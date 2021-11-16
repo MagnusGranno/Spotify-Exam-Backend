@@ -27,6 +27,7 @@ import security.errorhandling.AuthenticationException;
 import errorhandling.GenericExceptionMapper;
 import javax.persistence.EntityManagerFactory;
 import utils.EMF_Creator;
+import utils.SetupTestUsers;
 
 @Path("login")
 public class LoginEndpoint {
@@ -46,7 +47,7 @@ public class LoginEndpoint {
             username = json.get("username").getAsString();
             password = json.get("password").getAsString();
         } catch (Exception e) {
-           throw new API_Exception("Malformed JSON Suplied",400,e);
+            throw new API_Exception("Malformed JSON Suplied",400,e);
         }
 
         try {
@@ -97,22 +98,25 @@ public class LoginEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("create")
     public void createUser(String jsonString) throws API_Exception, AuthenticationException {
-        String username;
-        String password;
 
-        try {
-            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            username = json.get("username").getAsString();
-            password = json.get("password").getAsString();
+        SetupTestUsers.setupTestUsers();
 
-        } catch(Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
-        }
-
-        try {
-            USER_FACADE.createUser(username,password);
-        } catch (Exception e) {
-            throw new API_Exception("Malformed Json Suplied", 400, e);
-        }
+//        String username;
+//        String password;
+//
+//        try {
+//            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+//            username = json.get("username").getAsString();
+//            password = json.get("password").getAsString();
+//
+//        } catch(Exception e) {
+//            throw new API_Exception("Malformed JSON Suplied",400,e);
+//        }
+//
+//        try {
+//            USER_FACADE.createUser(username,password);
+//        } catch (Exception e) {
+//            throw new API_Exception("Malformed Json Suplied", 400, e);
+//        }
     }
 }

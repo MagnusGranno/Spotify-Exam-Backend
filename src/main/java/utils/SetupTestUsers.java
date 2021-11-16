@@ -10,10 +10,13 @@ import javax.persistence.EntityManagerFactory;
 public class SetupTestUsers {
 
   public static void main(String[] args) {
+    setupTestUsers();
+  }
 
+  public static void setupTestUsers(){
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
-    
+
     // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // This breaks one of the MOST fundamental security rules in that it ships with default users and passwords
     // CHANGE the three passwords below, before you uncomment and execute the code below
@@ -43,8 +46,7 @@ public class SetupTestUsers {
     //System.out.println("PW: " + user.getUserPass());
     //System.out.println("Testing user with OK password: " + user.verifyPassword("Kodener123",user.getUserPass()));
     //System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
-    //System.out.println("Created TEST Users"); 
-   
+    //System.out.println("Created TEST Users");
   }
 
 }
