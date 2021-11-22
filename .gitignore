@@ -27,8 +27,7 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-src/main/java/facades/Secrets.java
-./src/main/java/facades/Secrets.java
+Secrets.java
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
