@@ -1,11 +1,9 @@
 package rest;
 
-import DTO.ChuckJokeJsonDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.annotation.security.RolesAllowed;
@@ -78,15 +76,15 @@ public class DemoResource {
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
 
-    @GET
+  /*  @GET
     @Produces
     @Path("fiveServers")
     public String getDataFromFiveServers() throws ExecutionException, InterruptedException {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
         FacadeExample fc = FacadeExample.getFacadeExample(emf);
 
-        List<List<Object>> responses = fc.getDataFromFiveServers();
+        // List<List<Object>> responses = fc.getDataFromFiveServers();
 
-        return gson.toJson(responses);
-    }
+        // return gson.toJson(responses);
+        //}*/
 }

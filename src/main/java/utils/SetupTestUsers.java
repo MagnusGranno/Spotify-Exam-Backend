@@ -1,6 +1,7 @@
 package utils;
 
 
+import entities.Playlist;
 import entities.Role;
 import entities.User;
 
@@ -26,6 +27,8 @@ public class SetupTestUsers {
     User user = new User("user", "kode123");
     User admin = new User("admin", "kode123");
     User both = new User("user_admin", "kode123");
+    Playlist playlistOne = new Playlist("3012");
+    Playlist playlistTwo = new Playlist("9510");
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
@@ -37,6 +40,10 @@ public class SetupTestUsers {
     admin.addRole(adminRole);
     both.addRole(userRole);
     both.addRole(adminRole);
+    user.addPlaylist(playlistOne);
+    user.addPlaylist(playlistTwo);
+    em.persist(playlistTwo);
+    em.persist(playlistOne);
     em.persist(userRole);
     em.persist(adminRole);
     em.persist(user);
