@@ -10,6 +10,8 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name = "User.deleteAllRows", query = "delete from User")
+@NamedNativeQuery(name = "User.resetAutoIncrement", query = "ALTER TABLE Users AUTO_INCREMENT = 1;")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -39,7 +41,7 @@ public class User implements Serializable {
 
   @JoinTable(name = "playlist_users", joinColumns = {
           @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
-          @JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")})
+          @JoinColumn(name = "spotify_id", referencedColumnName = "spotify_id")})
   @ManyToMany
   private List<Playlist> playlistList = new ArrayList<>();
 

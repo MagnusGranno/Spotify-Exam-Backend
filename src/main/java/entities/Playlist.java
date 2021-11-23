@@ -7,16 +7,21 @@ import java.util.List;
 
 @Entity
 @Table(name = "playlist")
+@NamedQuery(name = "Playlist.deleteAllRows", query = "delete from Playlist")
+@NamedNativeQuery(name = "Playlist.resetAutoIncrement", query = "ALTER TABLE playlist AUTO_INCREMENT = 1;")
 public class Playlist implements Serializable {
 
     private static final long serialVersionUID = 1L;
+//    @Id
+//    @Basic(optional = false)
+//    @NotNull
+//    @Column(name = "playlist_id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
+
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "playlist_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     @Column(name = "spotify_id")
     private String spotifyId;
 
@@ -30,10 +35,6 @@ public class Playlist implements Serializable {
 
     public Playlist(String spotifyId) {
         this.spotifyId = spotifyId;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public int getLikes() {

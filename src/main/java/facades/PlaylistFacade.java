@@ -2,6 +2,7 @@ package facades;
 
 import com.google.gson.Gson;
 import entities.Playlist;
+import entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,6 +31,31 @@ public class PlaylistFacade {
 
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public void savePlaylistOnUser(String spotifyId, long userId){
+        EntityManager em = getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userId);
+            Playlist playlist = null;
+
+            if(em.find(Playlist.class,spotifyId) != null){
+                playlist = em.find(Playlist.class, spotifyId);
+            } else{
+                playlist = new Playlist(spotifyId);
+                em.persist(playlist);
+            }
+
+            user.addPlaylist(playlist);
+            em.merge(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+
     }
 
 
