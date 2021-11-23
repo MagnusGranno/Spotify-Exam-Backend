@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +33,7 @@ public class SpotifyResource {
     }
 
     @GET
-    @Produces
+    @Produces({MediaType.APPLICATION_JSON})
     @Path("browse")
     public String getCategoriesFromSpotify() throws IOException {
 
