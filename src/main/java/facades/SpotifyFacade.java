@@ -1,7 +1,11 @@
 package facades;
 
 
+import DTO.CategoriesDTO;
+import DTO.CategoryDTO;
+import DTO.ItemsDTO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import org.eclipse.yasson.YassonJsonb;
 
@@ -18,31 +22,28 @@ import java.util.List;
 
 public class SpotifyFacade {
     private static SpotifyFacade instance;
-    private static EntityManagerFactory emf;
-    private static String expiresIn;
-    private static String accessToken;
-    private static String refreshToken;
-    private static Gson gson = new Gson();
+    private String expiresIn;
+    private String accessToken;
+    private String refreshToken;
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 
 
     private SpotifyFacade() {
     }
 
-    public static SpotifyFacade getSpotifyFacade(EntityManagerFactory _emf) {
+    public static SpotifyFacade getSpotifyFacade() {
         if (instance == null) {
-            emf = _emf;
+
             instance = new SpotifyFacade();
         }
         return instance;
     }
 
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
 
 
-    public static String getTokenFromSpotify() throws IOException {
+    public String getTokenFromSpotify() throws IOException {
         String clientID = Secrets.clientID;
         String clientSecret = Secrets.clientSecret;
         String Response = null;
@@ -77,5 +78,26 @@ public class SpotifyFacade {
 
         return response;
 
+    }
+    public List<ItemsDTO> getCategories() throws IOException {
+        getTokenFromSpotify();
+        String browseUrl = "https://api.spotify.com/v1/browse/categories?locale=dk_US";
+
+        URL url = new URL(browseUrl);
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+        http.setRequestMethod("GET");
+        http.setRequestProperty("content-type", "application/json");
+        http.setRequestProperty("Authorization", "Bearer " +accessToken);
+
+        BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
+        String currentLine = Lines.readLine();
+        String response = "";
+        //TODO: 1
+        while (currentLine != null) {
+            response += currentLine;
+            currentLine = Lines.readLine();
+        }
+        System.out.println(response);
+        return gson.fromJson(response, CategoryDTO.class).getCategories().getItems();
     }
 }
