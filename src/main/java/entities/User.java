@@ -3,14 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.mindrot.jbcrypt.BCrypt;
@@ -23,18 +16,33 @@ public class User implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
-  @Column(name = "user_name", length = 25)
+  @Column(name = "user_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
+
+  @Column(name = "user_name")
+  @NotNull
+  @Basic(optional = false)
   private String userName;
+
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 255)
   @Column(name = "user_pass")
   private String userPass;
+
   @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
+
+  @JoinTable(name = "playlist_users", joinColumns = {
+          @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+          @JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")})
+  @ManyToMany
+  private List<Playlist> playlistList = new ArrayList<>();
+
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
@@ -75,6 +83,19 @@ public class User implements Serializable {
 
   public void setUserPass(String userPass) {
     this.userPass = userPass;
+  }
+  public List<Playlist> getPlaylistList() {
+    return playlistList;
+  }
+  public void setPlaylistList(List<Playlist> playlistList) {
+    this.playlistList = playlistList;
+  }
+  public void addPlaylist(Playlist myPlaylist) {
+    playlistList.add(myPlaylist);
+  }
+
+  public long getId() {
+    return id;
   }
 
   public List<Role> getRoleList() {

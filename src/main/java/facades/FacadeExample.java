@@ -1,6 +1,6 @@
 package facades;
 
-import DTO.*;
+
 import callables.Parallel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,7 +57,7 @@ public class FacadeExample {
         }
     }
 
-    public List<List<Object>> getDataFromFiveServers() throws ExecutionException, InterruptedException {
+   /* public List<List<Object>> getDataFromFiveServers() throws ExecutionException, InterruptedException {
 
         String[] hosts = {
                 "https://api.chucknorris.io/jokes/random",
@@ -105,5 +105,5 @@ public class FacadeExample {
         response.add(catFact);
 
         return response;
-    }
+    }*/
 }
