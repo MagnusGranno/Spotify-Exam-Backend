@@ -52,7 +52,7 @@ public class SpotifyResourceTest {
     }
 
     @Test
-    public void testSizeOfBrowseResponse() throws Exception {
+    public void testSizeOfBrowseResponse() {
        Response response = given()
                 .contentType("application/json")
                 .when()
@@ -66,11 +66,24 @@ public class SpotifyResourceTest {
     }
 
     @Test
-    public void testIsArrayOfBrowseWithGenreResponse() throws Exception {
+    public void testIsArrayOfBrowseWithGenreResponse() {
        Response response = given()
                 .contentType("application/json")
                 .when()
                 .get("/spotify/browse/gaming").then()
+                .extract().response();
+
+        List<String> JsonResponse = response.jsonPath().getList("$");
+        Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
+
+    }
+
+    @Test
+    public void testIsArrayOfTracks() {
+       Response response = given()
+                .contentType("application/json")
+                .when()
+                .get("/spotify/playlist/37i9dQZF1DXdfOcg1fm0VG").then()
                 .extract().response();
 
         List<String> JsonResponse = response.jsonPath().getList("$");

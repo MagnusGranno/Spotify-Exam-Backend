@@ -2,7 +2,7 @@ package rest;
 
 import DTO.CategoryDTOS.ItemsDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
-import DTO.PlaylistsDTOS.PlaylistObjectDTO;
+import DTO.TracksDTOS.TrackItemsDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import facades.SpotifyFacade;
@@ -51,5 +51,16 @@ public class SpotifyResource {
         List<PlaylistDTO> playlists = sf.getPlaylists(genre);
 
         return gson.toJson(playlists);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("playlist/{playlistId}")
+    public String getTracksFromSpotify(@PathParam("playlistId") String playlistId) throws IOException {
+
+        SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
+        List<TrackItemsDTO> tracks = sf.getTracks(playlistId);
+
+        return gson.toJson(tracks);
     }
 }

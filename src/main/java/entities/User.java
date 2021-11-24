@@ -11,7 +11,7 @@ import org.mindrot.jbcrypt.BCrypt;
 @Entity
 @Table(name = "users")
 @NamedQuery(name = "User.deleteAllRows", query = "delete from User")
-@NamedNativeQuery(name = "User.resetAutoIncrement", query = "ALTER TABLE Users AUTO_INCREMENT = 1;")
+@NamedNativeQuery(name = "User.resetAutoIncrement", query = "ALTER TABLE users AUTO_INCREMENT = 1;")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
