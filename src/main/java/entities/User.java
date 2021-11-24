@@ -15,13 +15,13 @@ import org.mindrot.jbcrypt.BCrypt;
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  @Id
-  @Basic(optional = false)
-  @NotNull
-  @Column(name = "user_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+//  @Basic(optional = false)
+//  @NotNull
+//  @Column(name = "user_id")
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  private long id;
 
+  @Id
   @Column(name = "user_name")
   @NotNull
   @Basic(optional = false)
@@ -34,13 +34,13 @@ public class User implements Serializable {
   private String userPass;
 
   @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
 
   @JoinTable(name = "playlist_users", joinColumns = {
-          @JoinColumn(name = "user_id", referencedColumnName = "user_id")}, inverseJoinColumns = {
+          @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
           @JoinColumn(name = "spotify_id", referencedColumnName = "spotify_id")})
   @ManyToMany
   private List<Playlist> playlistList = new ArrayList<>();
@@ -94,10 +94,6 @@ public class User implements Serializable {
   }
   public void addPlaylist(Playlist myPlaylist) {
     playlistList.add(myPlaylist);
-  }
-
-  public long getId() {
-    return id;
   }
 
   public List<Role> getRoleList() {

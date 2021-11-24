@@ -87,8 +87,8 @@ public class PlaylistFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            facade.savePlaylistOnUser("37i9dQZF1DWZqd5JICZI0u", 2);
-            User user = em.find(User.class, 2L);
+            facade.savePlaylistOnUser("37i9dQZF1DWZqd5JICZI0u", "user2");
+            User user = em.find(User.class, "user2");
 
             Assertions.assertEquals("37i9dQZF1DWZqd5JICZI0u", user.getPlaylistList().get(0).getSpotifyId());
 
@@ -102,8 +102,8 @@ public class PlaylistFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            facade.savePlaylistOnUser("37i9dQZF1DX9uKNf5jGX6m", 2);
-            User user = em.find(User.class, 2L);
+            facade.savePlaylistOnUser("37i9dQZF1DX9uKNf5jGX6m", "user2");
+            User user = em.find(User.class, "user2");
 
             Assertions.assertEquals("37i9dQZF1DX9uKNf5jGX6m", user.getPlaylistList().get(0).getSpotifyId());
 
