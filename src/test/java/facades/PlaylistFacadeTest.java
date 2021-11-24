@@ -27,6 +27,18 @@ public class PlaylistFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
 
+
+            em.getTransaction().begin();
+            em.createNamedQuery("User.deleteAllRows").executeUpdate();
+            em.createNamedQuery("User.resetAutoIncrement").executeUpdate();
+            em.createNamedQuery("Role.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Role.resetAutoIncrement").executeUpdate();
+            em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
+            em.getTransaction().commit();
+
+
+
             User user1 = new User("user1", "kode123");
             User user2 = new User("user2", "kode123");
             User admin = new User("admin", "kode123");
@@ -67,18 +79,18 @@ public class PlaylistFacadeTest {
 
     @AfterEach
     public void tearDown() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.createNamedQuery("User.deleteAllRows").executeUpdate();
-            em.createNamedQuery("User.resetAutoIncrement").executeUpdate();
-            em.createNamedQuery("Role.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Role.resetAutoIncrement").executeUpdate();
-            em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
-        } finally {
-            em.close();
-        }
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            em.getTransaction().begin();
+//            em.createNamedQuery("User.deleteAllRows").executeUpdate();
+//            em.createNamedQuery("User.resetAutoIncrement").executeUpdate();
+//            em.createNamedQuery("Role.deleteAllRows").executeUpdate();
+//            em.createNamedQuery("Role.resetAutoIncrement").executeUpdate();
+//            em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
+//            em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
+//        } finally {
+//            em.close();
+//        }
     }
 
     @Test
