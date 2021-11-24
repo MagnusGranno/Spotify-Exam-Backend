@@ -33,12 +33,12 @@ public class PlaylistFacade {
         return emf.createEntityManager();
     }
 
-    public void savePlaylistOnUser(String spotifyId, long userId){
+    public void savePlaylistOnUser(String spotifyId, String userName){
         EntityManager em = getEntityManager();
 
         try {
             em.getTransaction().begin();
-            User user = em.find(User.class, userId);
+            User user = em.find(User.class, userName);
             Playlist playlist = null;
 
             if(em.find(Playlist.class,spotifyId) != null){

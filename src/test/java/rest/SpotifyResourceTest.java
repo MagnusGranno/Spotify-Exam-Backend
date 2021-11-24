@@ -77,7 +77,6 @@ public class SpotifyResourceTest {
                 .extract().response();
 
         List<String> JsonResponse = response.jsonPath().getList("$");
-        System.out.println(JsonResponse);
         Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
 
     }
