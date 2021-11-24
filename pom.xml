@@ -17,8 +17,8 @@
         <!-- IMPORTANT-1: If your server uses https (via NGINX) use your DOMAIN NAME and https below: -->
         <!-- IMPORTANT-2: Observe we are NOT using /manager/html but /manager/text for script uploads --> 
 
-        <remote.server>https://www.arolander.com/tomcat/manager/text</remote.server>
-        <db.name>security_db</db.name>
+        <remote.server>https://www.oliverstaehr.com/tomcat/manager/text</remote.server>
+        <db.name>spotify_db</db.name>
 
     </properties>
 
