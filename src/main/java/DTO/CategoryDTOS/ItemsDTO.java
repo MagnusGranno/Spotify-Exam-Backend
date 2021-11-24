@@ -1,4 +1,4 @@
-package DTO;
+package DTO.CategoryDTOS;
 
 public class ItemsDTO {
     private String href;

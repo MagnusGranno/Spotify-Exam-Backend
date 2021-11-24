@@ -1,4 +1,4 @@
-package DTO;
+package DTO.CategoryDTOS;
 
 import java.util.List;
 

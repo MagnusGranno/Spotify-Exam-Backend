@@ -16,6 +16,7 @@ import utils.EMF_Creator;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -55,7 +56,7 @@ public class SpotifyResourceTest {
     }
 
     @Test
-    public void testSizeOfResponse() throws Exception {
+    public void testSizeOfBrowseResponse() throws Exception {
        Response response = given()
                 .contentType("application/json")
                 .when()
@@ -65,6 +66,20 @@ public class SpotifyResourceTest {
         List<String> JsonResponse = response.jsonPath().getList("$");
         Assertions.assertEquals(20, JsonResponse.size());
 
+
+    }
+
+    @Test
+    public void testIsArrayOfBrowseWithGenreResponse() throws Exception {
+       Response response = given()
+                .contentType("application/json")
+                .when()
+                .get("/spotify/browse/gaming").then()
+                .extract().response();
+
+        List<String> JsonResponse = response.jsonPath().getList("$");
+        System.out.println(JsonResponse);
+        Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
 
     }
 }

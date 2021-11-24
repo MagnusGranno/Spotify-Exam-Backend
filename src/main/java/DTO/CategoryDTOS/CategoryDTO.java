@@ -1,4 +1,4 @@
-package DTO;
+package DTO.CategoryDTOS;
 
 public class CategoryDTO {
 
