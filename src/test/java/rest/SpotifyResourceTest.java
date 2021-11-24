@@ -1,18 +1,15 @@
 package rest;
 
-import entities.RenameMe;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import utils.EMF_Creator;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -20,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 public class SpotifyResourceTest {
     private static final int SERVER_PORT = 7777;
@@ -52,7 +48,7 @@ public class SpotifyResourceTest {
 
     @Test
     public void testServerIsUp() {
-        given().when().get("/xxx").then().statusCode(200);
+        given().when().get("/spotify/browse").then().statusCode(200);
     }
 
     @Test

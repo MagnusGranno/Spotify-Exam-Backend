@@ -110,10 +110,7 @@ public class LoginEndpointTest {
         securityToken = null;
     }
 
-    @Test
-    public void serverIsRunning() {
-        given().when().get("/info").then().statusCode(200);
-    }
+
 
     @Test
     public void testRestNoAuthenticationRequired() {

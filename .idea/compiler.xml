@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Spotify-Exam-Backend" options="-endorseddirs C:\Users\olive\Documents\GitHub\Spotify\Spotify-Exam-Backend\target/endorsed" />
+      <module name="Spotify-Exam-Backend" options="-endorseddirs &quot;D:\3. Semester\Spotify_Exam\Spotify-Exam-Backend\target/endorsed&quot;" />
       <module name="security-start" options="-endorseddirs C:\Users\Alek\Dropbox\Dev\3.sem\startcode_secured\target/endorsed" />
       <module name="startcode_security" options="-endorseddirs &quot;D:\3. Semester\BackEndStartCode\startcode_security\target/endorsed&quot;" />
       <module name="startcode_security_backend" options="-endorseddirs C:\Users\olive\Documents\GitHub\startcode_security_backend\target/endorsed" />
