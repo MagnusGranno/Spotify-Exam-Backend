@@ -1,7 +1,6 @@
 package facades;
 
 import entities.Playlist;
-import entities.RenameMe;
 import entities.Role;
 import entities.User;
 import org.junit.jupiter.api.*;

@@ -1,6 +1,5 @@
 package rest;
 
-import entities.RenameMe;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
