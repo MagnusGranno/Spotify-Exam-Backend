@@ -1,11 +1,13 @@
 package facades;
 
 
-import DTO.CategoryDTOS.CategoryDTO;
+import DTO.CategoryDTOS.CategoryObjectDTO;
 import DTO.CategoryDTOS.ItemsDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistObjectDTO;
 import DTO.PlaylistsDTOS.PlaylistsDTO;
+import DTO.TracksDTOS.TrackItemsDTO;
+import DTO.TracksDTOS.TracksObjectDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -106,7 +108,7 @@ public class SpotifyFacade {
             currentLine = Lines.readLine();
         }
 //        System.out.println(response);
-        return gson.fromJson(response, CategoryDTO.class).getCategories().getItems();
+        return gson.fromJson(response, CategoryObjectDTO.class).getCategories().getItems();
     }
 
     public List<PlaylistDTO> getPlaylists (String genre) throws IOException {
@@ -122,17 +124,42 @@ public class SpotifyFacade {
         BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
         String currentLine = Lines.readLine();
         String response = "";
-        //TODO: 1
         while (currentLine != null) {
             response += currentLine;
             currentLine = Lines.readLine();
         }
-//        System.out.println(response);
 
         PlaylistsDTO playlistDTO = gson.fromJson(response, PlaylistObjectDTO.class).getPlaylistDTO();
         playlistDTO.moveImageUrlForEachItem();
 
         return playlistDTO.getPlaylistDTO();
+    }
+    public List<TrackItemsDTO> getTracks(String playlistId) throws IOException {
+        getTokenIfNeeded();
+        String browseUrl = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?offset=0&limit=20";
+
+        URL url = new URL(browseUrl);
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+        http.setRequestMethod("GET");
+        http.setRequestProperty("content-type", "application/json");
+        http.setRequestProperty("Authorization", "Bearer " +accessToken);
+
+        BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
+        String currentLine = Lines.readLine();
+        String response = "";
+        while (currentLine != null) {
+            response += currentLine;
+            currentLine = Lines.readLine();
+        }
+
+//        System.out.println(response);
+
+        TracksObjectDTO trackItemsDTO = gson.fromJson(response, TracksObjectDTO.class);
+        trackItemsDTO.moveDataToTrackItem();
+
+
+
+        return trackItemsDTO.getItems();
     }
 
 }

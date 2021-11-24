@@ -1,6 +1,6 @@
 package DTO.CategoryDTOS;
 
-public class CategoryDTO {
+public class CategoryObjectDTO {
 
     private CategoriesDTO categories;
 

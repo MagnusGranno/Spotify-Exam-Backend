@@ -54,8 +54,6 @@ public class PlaylistFacade {
         } finally {
             em.close();
         }
-
-
     }
 
 
