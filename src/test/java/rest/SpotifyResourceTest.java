@@ -51,7 +51,7 @@ public class SpotifyResourceTest {
 
     @Test
     public void testServerIsUp() {
-        given().when().get("/xxx").then().statusCode(200);
+        given().when().get("/spotify/browse").then().statusCode(200);
     }
 
     @Test
