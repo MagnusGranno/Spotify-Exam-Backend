@@ -91,7 +91,7 @@ public class SpotifyFacade {
 
     public List<ItemsDTO> getCategories() throws IOException {
         getTokenIfNeeded();
-        String browseUrl = "https://api.spotify.com/v1/browse/categories?locale=dk_US";
+        String browseUrl = "https://api.spotify.com/v1/browse/categories?locale=en_US";
 
         URL url = new URL(browseUrl);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
