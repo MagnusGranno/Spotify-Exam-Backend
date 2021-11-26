@@ -1,5 +1,6 @@
 package rest;
 
+import com.nimbusds.jose.shaded.json.JSONObject;
 import entities.User;
 import entities.Role;
 
@@ -11,6 +12,10 @@ import java.net.URI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
+
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import junit.framework.Assert;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -216,6 +221,24 @@ public class LoginEndpointTest {
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
+    }
+
+    @Test
+    public void testCreateUser() {
+        logOut();
+        RestAssured.baseURI = "http://localhost/api/login";
+        RequestSpecification request = RestAssured.given();
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("username", "megatest");
+        requestParams.put("password", "thisisatest123");
+        request.header("Content-Type", "application/json");
+        request.body(requestParams.toJSONString());
+
+        Response response = request.post("/create");
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals(statusCode, 200);
+
+
     }
 
 }

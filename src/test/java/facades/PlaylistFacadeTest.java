@@ -109,6 +109,22 @@ public class PlaylistFacadeTest {
     }
 
     @Test
+    public void testunSavePlaylist() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            facade.savePlaylistOnUser("37i9dQZF1DWZqd5JICZI0u", "user2");
+            facade.unSavePlaylistFromUser("37i9dQZF1DWZqd5JICZI0u", "user2");
+            Playlist playlist = em.find(Playlist.class, "37i9dQZF1DWZqd5JICZI0u");
+
+            Assertions.assertEquals(0, playlist.getFollowers());
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Test
     public void testSavePlaylistOnUserExistingPlaylist() {
         EntityManager em = emf.createEntityManager();
         try {
