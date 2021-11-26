@@ -126,6 +126,7 @@ public class SpotifyResource {
         }
     }
 
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("myplaylists/{username}")

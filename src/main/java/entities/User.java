@@ -45,7 +45,6 @@ public class User implements Serializable {
   @ManyToMany
   private List<Playlist> playlistList = new ArrayList<>();
 
-
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
       return null;
@@ -94,9 +93,11 @@ public class User implements Serializable {
   }
   public void addPlaylist(Playlist myPlaylist) {
     playlistList.add(myPlaylist);
+    myPlaylist.addFollower();
   }
   public void removePlaylist(Playlist playlist) {
     playlistList.remove(playlist);
+    playlist.removeFollower();
   }
 
   public List<Role> getRoleList() {

@@ -63,13 +63,14 @@ public class PlaylistFacade {
             User user = em.find(User.class, username);
             Playlist playlist = em.find(Playlist.class, spotifyId);
             user.removePlaylist(playlist);
-
             em.merge(user);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
+
+
 
 
 }

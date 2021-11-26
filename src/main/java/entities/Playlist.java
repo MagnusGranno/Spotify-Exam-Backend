@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,8 @@ public class Playlist implements Serializable {
     @ManyToMany(mappedBy = "playlistList")
     private List<User> userList;
 
-    private int likes;
+    private int followers;
+
 
     public Playlist() {
     }
@@ -37,12 +39,18 @@ public class Playlist implements Serializable {
         this.spotifyId = spotifyId;
     }
 
-    public int getLikes() {
-        return likes;
+    public int getFollowers() {
+        return followers;
     }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public void addFollower() {
+        this.followers++;
+    }
+    public void removeFollower() {
+        if(followers == 0) {
+            return;
+        }
+        this.followers--;
     }
 
     public String getSpotifyId() {
