@@ -1,5 +1,8 @@
 package facades;
 
+import DTO.UserDTOS.CreateUserDTO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entities.Role;
 import entities.User;
 
@@ -16,6 +19,7 @@ public class UserFacade {
 
     private static EntityManagerFactory emf;
     private static UserFacade instance;
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private UserFacade() {
     }
@@ -47,7 +51,7 @@ public class UserFacade {
     }
 
     public String createUser(String username, String password) {
-
+        CreateUserDTO createUserDTO = new CreateUserDTO();
         EntityManager em = emf.createEntityManager();
 
         User user = new User(username, password);
@@ -71,12 +75,16 @@ public class UserFacade {
 
 
         } catch (Exception e) {
-            return username + " already exists!";
+            createUserDTO.setStatus("failed");
+            createUserDTO.setMessage(username + " already exists!");
+            return gson.toJson(createUserDTO);
         } finally
          {
             em.close();
         }
-        return username + " created successfully!";
+        createUserDTO.setStatus("succes");
+        createUserDTO.setMessage(username + " created successfully!");
+        return gson.toJson(createUserDTO);
     }
 
 

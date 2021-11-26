@@ -1,23 +1,28 @@
 package rest;
 
 import DTO.CategoryDTOS.ItemsDTO;
+import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.TracksDTOS.TrackItemsDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import errorhandling.API_Exception;
+import facades.PlaylistFacade;
 import facades.SpotifyFacade;
+import security.errorhandling.AuthenticationException;
+import utils.EMF_Creator;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
 
 @Path("spotify")
 public class SpotifyResource {
-
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @GET
     @Produces
@@ -64,5 +69,45 @@ public class SpotifyResource {
         return gson.toJson(tracks);
     }
 
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("follow")
+    public void followPlaylist(String jsonString) throws API_Exception, AuthenticationException {
+
+
+        PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
+
+        String username;
+        String spotifyId;
+
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            username = json.get("username").getAsString();
+            spotifyId = json.get("spotifyId").getAsString();
+
+        } catch(Exception e) {
+            throw new API_Exception("Malformed JSON Suplied 1",400,e);
+        }
+
+        try {
+            pf.savePlaylistOnUser(spotifyId, username);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed Json Suplied 2", 400, e);
+        }
+    }
+
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("myplaylists/{username}")
+    public String getFollowedPlaylists(@PathParam("username") String username) throws IOException {
+
+        SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
+        List<MyPlaylistDTO> myPlaylistDTOS = sf.getFollowedPlaylists(username);
+
+        return gson.toJson(myPlaylistDTOS);
+    }
 
 }
