@@ -116,7 +116,7 @@ public class LoginEndpoint {
         }
 
         try {
-            return gson.toJson(USER_FACADE.createUser(username,password));
+            return USER_FACADE.createUser(username,password);
         } catch (Exception e) {
             throw new API_Exception("Malformed Json Suplied 2", 400, e);
         }
