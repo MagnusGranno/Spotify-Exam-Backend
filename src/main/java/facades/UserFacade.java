@@ -71,12 +71,12 @@ public class UserFacade {
 
 
         } catch (Exception e) {
-            return "User:, " + username + ", already, exists!";
+            return username + " already exists!";
         } finally
          {
             em.close();
         }
-        return "User:, " + username + ", created, succesfully!";
+        return username + " created successfully!";
     }
 
 

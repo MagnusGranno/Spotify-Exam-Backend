@@ -1,6 +1,7 @@
 package security;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nimbusds.jose.JOSEException;
@@ -35,6 +36,7 @@ public class LoginEndpoint {
     public static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 30; //30 min
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
+    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -114,7 +116,7 @@ public class LoginEndpoint {
         }
 
         try {
-            return USER_FACADE.createUser(username,password);
+            return gson.toJson(USER_FACADE.createUser(username,password));
         } catch (Exception e) {
             throw new API_Exception("Malformed Json Suplied 2", 400, e);
         }
