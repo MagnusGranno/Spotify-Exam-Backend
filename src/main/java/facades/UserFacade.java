@@ -2,6 +2,7 @@ package facades;
 
 import entities.Role;
 import entities.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -20,7 +21,6 @@ public class UserFacade {
     }
 
     /**
-     *
      * @param _emf
      * @return the instance of this facade.
      */
@@ -46,22 +46,33 @@ public class UserFacade {
         return user;
     }
 
-    public void createUser(String username, String password){
+    public void createUser(String username, String password) {
 
         EntityManager em = emf.createEntityManager();
-        User user = new User(username,password);
-        Role userRole = em.find(Role.class, "user");
+        User user = new User(username, password);
+        Role userRole;
         try {
-            em.getTransaction().begin();
-            user.addRole(userRole);
-            em.persist(user);
-            em.getTransaction().commit();
+            if (em.find(Role.class, "user") != null) {
+                em.getTransaction().begin();
+                userRole = em.find(Role.class, "user");
+                user.addRole(userRole);
+                em.persist(user);
+                em.getTransaction().commit();
+            }
+            else {
+                Role newUserRole = new Role("user");
+                em.getTransaction().begin();
+                em.persist(newUserRole);
+                user.addRole(newUserRole);
+                em.persist(user);
+                em.getTransaction().commit();
+            }
+
+
         } finally {
             em.close();
         }
     }
-
-
 
 
 }
