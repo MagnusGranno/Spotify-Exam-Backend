@@ -1,6 +1,7 @@
 package rest;
 
 import DTO.CategoryDTOS.ItemsDTO;
+import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.TracksDTOS.TrackItemsDTO;
 import com.google.gson.Gson;
@@ -97,5 +98,16 @@ public class SpotifyResource {
         }
     }
 
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("myplaylists/{username}")
+    public String getFollowedPlaylists(@PathParam("username") String username) throws IOException {
+
+        SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
+        List<MyPlaylistDTO> myPlaylistDTOS = sf.getFollowedPlaylists(username);
+
+        return gson.toJson(myPlaylistDTOS);
+    }
 
 }

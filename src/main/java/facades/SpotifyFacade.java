@@ -3,6 +3,7 @@ package facades;
 
 import DTO.CategoryDTOS.CategoryObjectDTO;
 import DTO.CategoryDTOS.ItemsDTO;
+import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistObjectDTO;
 import DTO.PlaylistsDTOS.PlaylistsDTO;
@@ -11,7 +12,12 @@ import DTO.TracksDTOS.TracksObjectDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import entities.Playlist;
+import entities.User;
+import utils.EMF_Creator;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.io.*;
 import java.net.HttpURLConnection;
 
@@ -19,6 +25,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +36,7 @@ public class SpotifyFacade {
     private String accessToken;
     private String refreshToken;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
 
 
     private SpotifyFacade() {
@@ -161,6 +168,37 @@ public class SpotifyFacade {
 
         return trackItemsDTO.getItems();
     }
+
+    public List<MyPlaylistDTO> getFollowedPlaylists(String username) throws IOException {
+        getTokenIfNeeded();
+
+        String browseUrl = "https://api.spotify.com/v1/playlists/";
+        EntityManager em = EMF.createEntityManager();
+        User user = em.find(User.class, username);
+
+        List<MyPlaylistDTO> myPlaylistDTOList = new ArrayList<>();
+
+        for(Playlist pl : user.getPlaylistList()) {
+            URL url = new URL(browseUrl + pl.getSpotifyId());
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod("GET");
+            http.setRequestProperty("content-type", "application/json");
+            http.setRequestProperty("Authorization", "Bearer " +accessToken);
+
+            BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
+            String currentLine = Lines.readLine();
+            String response = "";
+            while (currentLine != null) {
+                response += currentLine;
+                currentLine = Lines.readLine();
+            }
+            MyPlaylistDTO myPlaylistDTO = gson.fromJson(response, MyPlaylistDTO.class);
+            myPlaylistDTO.moveImageUrl();
+            myPlaylistDTOList.add(myPlaylistDTO);
+        }
+        return myPlaylistDTOList;
+    }
+
 
 }
 
