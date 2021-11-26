@@ -95,6 +95,9 @@ public class User implements Serializable {
   public void addPlaylist(Playlist myPlaylist) {
     playlistList.add(myPlaylist);
   }
+  public void removePlaylist(Playlist playlist) {
+    playlistList.remove(playlist);
+  }
 
   public List<Role> getRoleList() {
     return roleList;
