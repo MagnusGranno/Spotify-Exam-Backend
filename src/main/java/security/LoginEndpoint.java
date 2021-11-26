@@ -99,24 +99,24 @@ public class LoginEndpoint {
     @Path("create")
     public void createUser(String jsonString) throws API_Exception, AuthenticationException {
 
-        SetupTestUsers.setupTestUsers();
+       // SetupTestUsers.setupTestUsers();
 
-//        String username;
-//        String password;
-//
-//        try {
-//            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-//            username = json.get("username").getAsString();
-//            password = json.get("password").getAsString();
-//
-//        } catch(Exception e) {
-//            throw new API_Exception("Malformed JSON Suplied",400,e);
-//        }
-//
-//        try {
-//            USER_FACADE.createUser(username,password);
-//        } catch (Exception e) {
-//            throw new API_Exception("Malformed Json Suplied", 400, e);
-//        }
+        String username;
+        String password;
+
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            username = json.get("username").getAsString();
+            password = json.get("password").getAsString();
+
+        } catch(Exception e) {
+            throw new API_Exception("Malformed JSON Suplied 1",400,e);
+        }
+
+        try {
+            USER_FACADE.createUser(username,password);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed Json Suplied 2", 400, e);
+        }
     }
 }
