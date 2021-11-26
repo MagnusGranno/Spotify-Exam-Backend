@@ -97,7 +97,7 @@ public class LoginEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("create")
-    public void createUser(String jsonString) throws API_Exception, AuthenticationException {
+    public String createUser(String jsonString) throws API_Exception, AuthenticationException {
 
        // SetupTestUsers.setupTestUsers();
 
@@ -114,7 +114,7 @@ public class LoginEndpoint {
         }
 
         try {
-            USER_FACADE.createUser(username,password);
+            return USER_FACADE.createUser(username,password);
         } catch (Exception e) {
             throw new API_Exception("Malformed Json Suplied 2", 400, e);
         }

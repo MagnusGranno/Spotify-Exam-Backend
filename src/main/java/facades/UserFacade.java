@@ -46,9 +46,10 @@ public class UserFacade {
         return user;
     }
 
-    public void createUser(String username, String password) {
+    public String createUser(String username, String password) {
 
         EntityManager em = emf.createEntityManager();
+
         User user = new User(username, password);
         Role userRole;
         try {
@@ -69,9 +70,13 @@ public class UserFacade {
             }
 
 
-        } finally {
+        } catch (Exception e) {
+            return "User:, " + username + ", already, exists!";
+        } finally
+         {
             em.close();
         }
+        return "User:, " + username + ", created, succesfully!";
     }
 
 
