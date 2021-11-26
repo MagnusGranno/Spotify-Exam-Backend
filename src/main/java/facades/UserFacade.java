@@ -82,7 +82,7 @@ public class UserFacade {
          {
             em.close();
         }
-        createUserDTO.setStatus("succes");
+        createUserDTO.setStatus("success");
         createUserDTO.setMessage(username + " created successfully!");
         return gson.toJson(createUserDTO);
     }
