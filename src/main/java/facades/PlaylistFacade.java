@@ -56,6 +56,21 @@ public class PlaylistFacade {
         }
     }
 
+    public void unSavePlaylistFromUser(String spotifyId, String username) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, username);
+            Playlist playlist = em.find(Playlist.class, spotifyId);
+            user.removePlaylist(playlist);
+            em.merge(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+
 
 
 }

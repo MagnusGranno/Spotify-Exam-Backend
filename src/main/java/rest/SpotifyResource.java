@@ -98,6 +98,34 @@ public class SpotifyResource {
         }
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("unfollow")
+    public void unFollowPlaylist(String jsonString) throws API_Exception, AuthenticationException {
+
+
+        PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
+
+        String username;
+        String spotifyId;
+
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            username = json.get("username").getAsString();
+            spotifyId = json.get("spotifyId").getAsString();
+
+        } catch(Exception e) {
+            throw new API_Exception("Malformed JSON Suplied 1",400,e);
+        }
+
+        try {
+            pf.unSavePlaylistFromUser(spotifyId, username);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed Json Suplied 2", 400, e);
+        }
+    }
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
