@@ -15,16 +15,12 @@ import javax.ws.rs.core.UriBuilder;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import junit.framework.Assert;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
 //Disabled
@@ -114,8 +110,6 @@ public class LoginEndpointTest {
     private void logOut() {
         securityToken = null;
     }
-
-
 
     @Test
     public void testRestNoAuthenticationRequired() {
@@ -225,8 +219,6 @@ public class LoginEndpointTest {
 
     @Test
     public void testCreateUser() {
-        logOut();
-        RestAssured.baseURI = "http://localhost/api/login";
         RequestSpecification request = RestAssured.given();
         JSONObject requestParams = new JSONObject();
         requestParams.put("username", "megatest");
@@ -234,11 +226,11 @@ public class LoginEndpointTest {
         request.header("Content-Type", "application/json");
         request.body(requestParams.toJSONString());
 
-        Response response = request.post("/create");
+        Response response = request.post("login/create");
         int statusCode = response.getStatusCode();
-        Assert.assertEquals(statusCode, 200);
+        Assertions.assertEquals(statusCode, 200);
 
+        logOut();
 
     }
-
 }
