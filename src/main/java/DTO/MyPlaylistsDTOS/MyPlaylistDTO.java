@@ -9,7 +9,15 @@ public class MyPlaylistDTO {
     private String id;
     private List<MyPlaylistImage> images;
     private String imageUrl;
+    private int userFollowers;
 
+    public void setUserFollowers(int userFollowers) {
+        this.userFollowers = userFollowers;
+    }
+
+    public int getUserFollowers() {
+        return userFollowers;
+    }
 
     public void moveImageUrl(){
         if(!images.isEmpty()){

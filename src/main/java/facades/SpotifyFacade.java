@@ -42,6 +42,10 @@ public class SpotifyFacade {
     private SpotifyFacade() {
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
     public static SpotifyFacade getSpotifyFacade() {
         if (instance == null) {
 
@@ -49,9 +53,6 @@ public class SpotifyFacade {
         }
         return instance;
     }
-
-
-
 
     public String getTokenFromSpotify() throws IOException {
         String clientID = Secrets.clientID;

@@ -1,5 +1,6 @@
 package facades;
 
+import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import entities.Playlist;
 import entities.Role;
 import entities.User;
@@ -8,6 +9,10 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class PlaylistFacadeTest {
 
@@ -77,22 +82,6 @@ public class PlaylistFacadeTest {
         }
     }
 
-    @AfterEach
-    public void tearDown() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            em.createNamedQuery("User.deleteAllRows").executeUpdate();
-//            em.createNamedQuery("User.resetAutoIncrement").executeUpdate();
-//            em.createNamedQuery("Role.deleteAllRows").executeUpdate();
-//            em.createNamedQuery("Role.resetAutoIncrement").executeUpdate();
-//            em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
-//            em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
-//        } finally {
-//            em.close();
-//        }
-    }
-
     @Test
     public void testSavePlaylistOnUserNewPlaylist() {
         EntityManager em = emf.createEntityManager();
@@ -109,7 +98,7 @@ public class PlaylistFacadeTest {
     }
 
     @Test
-    public void testunSavePlaylist() {
+    public void testUnSavePlaylist() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -137,5 +126,22 @@ public class PlaylistFacadeTest {
         } finally {
             em.close();
         }
+    }
+
+    @Test
+    public void testGetMostPopularPlaylists() {
+        EntityManager em = emf.createEntityManager();
+        List<MyPlaylistDTO> myPlaylistDTO = new ArrayList<>();
+        try {
+            myPlaylistDTO = facade.getMostPopularPlaylists();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        Assertions.assertEquals(1,myPlaylistDTO.get(0).getUserFollowers());
+        Assertions.assertEquals(1,myPlaylistDTO.get(1).getUserFollowers());
+
     }
 }

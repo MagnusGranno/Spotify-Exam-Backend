@@ -126,4 +126,17 @@ public class SpotifyResourceTest {
         List<String> JsonResponse = response.jsonPath().getList("$");
         Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
     }
+
+    @Test
+    public void testGetMostPopularPlaylists () {
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .get("/spotify/popular").then()
+                .extract().response();
+
+        List<String> JsonResponse = response.jsonPath().getList("$");
+        Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
+    }
+
 }

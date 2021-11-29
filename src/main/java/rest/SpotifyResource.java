@@ -24,13 +24,14 @@ import java.util.List;
 public class SpotifyResource {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
     @GET
     @Produces
     @Path("token")
     public String getTokenFromSpotify() throws IOException {
 
         SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
-
         String result = sf.getTokenFromSpotify();
 
         return result;
@@ -136,6 +137,21 @@ public class SpotifyResource {
         List<MyPlaylistDTO> myPlaylistDTOS = sf.getFollowedPlaylists(username);
 
         return gson.toJson(myPlaylistDTOS);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("popular")
+    public String getMostPopularPlaylists() throws API_Exception {
+        PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
+        List<MyPlaylistDTO> response;
+
+        try{
+            response = pf.getMostPopularPlaylists();
+        } catch (Exception e) {
+            throw new API_Exception("Failed to fetch most popular playlists", 400, e);
+        }
+        return gson.toJson(response);
     }
 
 }
