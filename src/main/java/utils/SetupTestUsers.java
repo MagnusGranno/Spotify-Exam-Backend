@@ -27,8 +27,8 @@ public class SetupTestUsers {
     User user = new User("user", "kode123");
     User admin = new User("admin", "kode123");
     User both = new User("user_admin", "kode123");
-    Playlist playlistOne = new Playlist("3012");
-    Playlist playlistTwo = new Playlist("9510");
+    Playlist playlistOne = new Playlist("37i9dQZF1DX4SBhb3fqCJd");
+    Playlist playlistTwo = new Playlist("37i9dQZEVXbLRQDuF5jeBp");
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
