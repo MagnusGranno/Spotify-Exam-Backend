@@ -98,7 +98,7 @@ public class PlaylistFacade {
         try {
             TypedQuery tq = em.createQuery(
                     "select p from Playlist p order by p.followers desc", Playlist.class);
-            tq.setMaxResults(8);
+            tq.setMaxResults(10);
             playlists = tq.getResultList();
         } finally {
             em.close();
