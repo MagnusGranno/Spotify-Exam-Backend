@@ -14,6 +14,7 @@ import facades.SpotifyFacade;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -75,6 +76,7 @@ public class SpotifyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("follow")
+    @RolesAllowed({"user","admin"})
     public void followPlaylist(String jsonString) throws API_Exception, AuthenticationException {
 
 
@@ -103,6 +105,7 @@ public class SpotifyResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("unfollow")
+    @RolesAllowed({"user","admin"})
     public void unFollowPlaylist(String jsonString) throws API_Exception, AuthenticationException {
 
 
@@ -131,6 +134,7 @@ public class SpotifyResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("myplaylists/{username}")
+    @RolesAllowed({"user","admin"})
     public String getFollowedPlaylists(@PathParam("username") String username) throws IOException {
 
         SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
