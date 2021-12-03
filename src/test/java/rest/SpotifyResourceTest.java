@@ -103,29 +103,29 @@ public class SpotifyResourceTest {
 
     }
 
-    @Test
-    public void testIsArrayOfFollowedPlaylists() {
-        EntityManager em = emf.createEntityManager();
-        User user = new User("Peter", "peter123");
-        try {
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-
-        playlistFacade.savePlaylistOnUser("37i9dQZF1DX6IdqACeHRY7", "Peter");
-
-        Response response = given()
-                .contentType("application/json")
-                .when()
-                .get("/spotify/myplaylists/Peter").then()
-                .extract().response();
-
-        List<String> JsonResponse = response.jsonPath().getList("$");
-        Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
-    }
+//    @Test
+//    public void testIsArrayOfFollowedPlaylists() {
+//        EntityManager em = emf.createEntityManager();
+//        User user = new User("Peter", "peter123");
+//        try {
+//            em.getTransaction().begin();
+//            em.persist(user);
+//            em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//
+//        playlistFacade.savePlaylistOnUser("37i9dQZF1DX6IdqACeHRY7", "Peter");
+//
+//        Response response = given()
+//                .contentType("application/json")
+//                .when()
+//                .get("/spotify/myplaylists/Peter").then()
+//                .extract().response();
+//
+//        List<String> JsonResponse = response.jsonPath().getList("$");
+//        Assertions.assertEquals(ArrayList.class, JsonResponse.getClass());
+//    }
 
     @Test
     public void testGetMostPopularPlaylists () {
