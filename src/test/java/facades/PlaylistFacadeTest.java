@@ -1,25 +1,29 @@
 package facades;
 
+import DTO.CountDTOS.CountDTO;
 import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
+import DTO.UserDTOS.UserDTO;
 import entities.Playlist;
 import entities.Role;
 import entities.User;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class PlaylistFacadeTest {
 
     private static EntityManagerFactory emf;
     private static PlaylistFacade facade;
 
-    public PlaylistFacadeTest() {}
+    public PlaylistFacadeTest() {
+    }
 
     @BeforeAll
     public static void setUpClass() {
@@ -41,7 +45,6 @@ public class PlaylistFacadeTest {
             em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
             em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
             em.getTransaction().commit();
-
 
 
             User user1 = new User("user1", "kode123");
@@ -140,8 +143,46 @@ public class PlaylistFacadeTest {
         } finally {
             em.close();
         }
-        Assertions.assertEquals(1,myPlaylistDTO.get(0).getUserFollowers());
-        Assertions.assertEquals(1,myPlaylistDTO.get(1).getUserFollowers());
+        Assertions.assertEquals(1, myPlaylistDTO.get(0).getUserFollowers());
+        Assertions.assertEquals(1, myPlaylistDTO.get(1).getUserFollowers());
 
+    }
+
+    @Test
+    public void testGetAllUsersFromDatabase() {
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        try {
+            userDTOS = facade.getAllUsersFromDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boolean check = false;
+
+        for (UserDTO user : userDTOS) {
+            if (user.getUserName().equals("user1")) {
+                check = true;
+                Assertions.assertEquals("user1", user.getUserName());
+            }
+        }
+
+        if (!check) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    public void testGetCountOfAllUsers() {
+        CountDTO userCount = null;
+
+        try {
+            userCount = facade.getCountOfUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(4, userCount.getUserCount());
     }
 }

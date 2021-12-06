@@ -10,9 +10,9 @@ public class PlaylistsDTO {
         return items;
     }
 
-    public void moveImageUrlForEachItem(){
-        if(!items.isEmpty()){
-            for(PlaylistDTO p : items){
+    public void moveImageUrlForEachItem() {
+        if (!items.isEmpty()) {
+            for (PlaylistDTO p : items) {
                 p.moveImageUrl();
                 p.setImages(null);
             }

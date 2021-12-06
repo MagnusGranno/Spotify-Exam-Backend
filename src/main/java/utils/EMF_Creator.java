@@ -1,10 +1,10 @@
 package utils;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class EMF_Creator {
 
@@ -54,8 +54,8 @@ public class EMF_Creator {
             props.setProperty("javax.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
 
             //Sets the production log-level to show only potential problems
-            props.setProperty("eclipselink.logging.level","WARNING");
-            props.setProperty("eclipselink.logging.level.sql","WARNING");
+            props.setProperty("eclipselink.logging.level", "WARNING");
+            props.setProperty("eclipselink.logging.level.sql", "WARNING");
             return Persistence.createEntityManagerFactory("pu", props);
         }
 
@@ -70,9 +70,9 @@ public class EMF_Creator {
         }
         EntityManagerFactory emf = null;
         try {
-            emf =  Persistence.createEntityManagerFactory(puName, null);
+            emf = Persistence.createEntityManagerFactory(puName, null);
 
-        } catch (javax.persistence.PersistenceException ex){
+        } catch (javax.persistence.PersistenceException ex) {
             System.out.println("##########################################################");
             System.out.println("######      ERROR Creating a persistence Unit       ######");
             System.out.println("###### Have you started the dev and test databases? ######");

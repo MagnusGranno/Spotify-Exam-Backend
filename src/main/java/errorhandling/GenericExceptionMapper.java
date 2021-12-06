@@ -2,8 +2,7 @@ package errorhandling;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -11,6 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
@@ -25,7 +26,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         Response.StatusType type = getStatusType(ex);
         ExceptionDTO err;
         if (ex instanceof WebApplicationException) {
-            err = new ExceptionDTO(type.getStatusCode(), ((WebApplicationException) ex).getMessage());
+            err = new ExceptionDTO(type.getStatusCode(), ex.getMessage());
         } else {
 
             err = new ExceptionDTO(type.getStatusCode(), type.getReasonPhrase());

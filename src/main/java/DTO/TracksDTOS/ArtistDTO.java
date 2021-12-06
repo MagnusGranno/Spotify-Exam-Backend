@@ -6,7 +6,7 @@ public class ArtistDTO {
     private String name;
     private String url;
 
-    public void moveExternalUrls(){
+    public void moveExternalUrls() {
         this.url = external_urls.getSpotify();
         external_urls = null;
     }

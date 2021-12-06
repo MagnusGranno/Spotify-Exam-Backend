@@ -1,5 +1,6 @@
 package security;
 
+import DTO.StatusDTOS.StatusDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -11,24 +12,22 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import entities.User;
+import errorhandling.API_Exception;
+import errorhandling.GenericExceptionMapper;
 import facades.UserFacade;
+import security.errorhandling.AuthenticationException;
+import utils.EMF_Creator;
+
+import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import entities.User;
-import errorhandling.API_Exception;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import security.errorhandling.AuthenticationException;
-import errorhandling.GenericExceptionMapper;
-import javax.persistence.EntityManagerFactory;
-import utils.EMF_Creator;
-import utils.SetupTestUsers;
 
 @Path("login")
 public class LoginEndpoint {
@@ -49,7 +48,7 @@ public class LoginEndpoint {
             username = json.get("username").getAsString();
             password = json.get("password").getAsString();
         } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
@@ -99,9 +98,7 @@ public class LoginEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("create")
-    public String createUser(String jsonString) throws API_Exception, AuthenticationException {
-
-       // SetupTestUsers.setupTestUsers();
+    public String createUser(String jsonString) throws API_Exception {
 
         String username;
         String password;
@@ -111,14 +108,57 @@ public class LoginEndpoint {
             username = json.get("username").getAsString();
             password = json.get("password").getAsString();
 
-        } catch(Exception e) {
-            throw new API_Exception("Malformed JSON Suplied 1",400,e);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
-            return USER_FACADE.createUser(username,password);
+            return USER_FACADE.createUser(username, password);
         } catch (Exception e) {
-            throw new API_Exception("Malformed Json Suplied 2", 400, e);
+            throw new API_Exception("Malformed Json Suplied", 400, e);
         }
+    }
+
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("delete/{userName}")
+    @RolesAllowed("admin")
+    public String deleteUserFromDatabase(@PathParam("userName") String userName) throws API_Exception {
+        StatusDTO response;
+
+        try {
+            response = USER_FACADE.deleteUser(userName);
+        } catch (Exception e) {
+            throw new API_Exception("Failed to delete user", 400, e);
+        }
+        return gson.toJson(response);
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("update/{userName}")
+    @RolesAllowed({"admin","user"})
+    public String updateUserFromDatabase(@PathParam("userName") String userName, String jsonString) throws API_Exception {
+
+        String newPassword;
+        StatusDTO response;
+
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            newPassword = json.get("password").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+
+        try {
+            response = USER_FACADE.updateUser(userName, newPassword);
+
+        } catch (Exception e) {
+            throw new API_Exception("Failed to update user", 400, e);
+        }
+
+        return gson.toJson(response);
     }
 }

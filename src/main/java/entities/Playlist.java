@@ -3,7 +3,6 @@ package entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,8 +45,9 @@ public class Playlist implements Serializable {
     public void addFollower() {
         this.followers++;
     }
+
     public void removeFollower() {
-        if(followers == 0) {
+        if (followers == 0) {
             return;
         }
         this.followers--;
