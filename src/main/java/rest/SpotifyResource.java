@@ -18,6 +18,7 @@ import utils.EMF_Creator;
 
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PostRemove;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -151,7 +152,7 @@ public class SpotifyResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("users")
-//    @RolesAllowed({"user", "admin"})
+    @RolesAllowed({"user", "admin"})
     public String getAllUsersFromDatabase() throws API_Exception {
         PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
         List<UserDTO> response;
@@ -167,7 +168,7 @@ public class SpotifyResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("usercount")
-//    @RolesAllowed("admin")
+    @RolesAllowed("admin")
     public String getCountOfAllUsers() throws API_Exception {
         PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
         CountDTO response;

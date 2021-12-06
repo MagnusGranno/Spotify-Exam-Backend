@@ -1,5 +1,6 @@
 package facades;
 
+import DTO.StatusDTOS.StatusDTO;
 import DTO.UserDTOS.CreateUserDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -87,5 +88,17 @@ public class UserFacade {
         return gson.toJson(createUserDTO);
     }
 
+    public StatusDTO deleteUser(String userName) {
+        EntityManager em = emf.createEntityManager();
 
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            em.remove(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new StatusDTO("Success", userName + " deleted");
+    }
 }
