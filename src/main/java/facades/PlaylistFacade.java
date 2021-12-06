@@ -1,5 +1,6 @@
 package facades;
 
+import DTO.CountDTOS.CountDTO;
 import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.UserDTOS.UserDTO;
 import callables.Parallel;
@@ -10,6 +11,7 @@ import entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -125,6 +128,18 @@ public class PlaylistFacade {
         return myPlaylistDTOList;
     }
 
+    public CountDTO getCountOfUsers() {
+        EntityManager em = getEntityManager();
+        CountDTO countDTO;
+        try {
+            TypedQuery<Long> q = em.createQuery("select count(u) from User u", Long.class);
+            countDTO = new CountDTO(q.getSingleResult());
+        } finally {
+           em.close();
+        }
+        return countDTO;
+    }
+
     public List<UserDTO> getAllUsersFromDatabase(){
         EntityManager em = getEntityManager();
         List<UserDTO> userDTOS = new ArrayList<>();
@@ -132,7 +147,9 @@ public class PlaylistFacade {
             TypedQuery<User> tq = em.createQuery("select u from User u",User.class);
             List<User> users = tq.getResultList();
             for(User user: users){
-                userDTOS.add(new UserDTO(user));
+                Query q = em.createQuery("select count(user.playlistList) from User user where user.userName = :userName");
+                q.setParameter("userName",user.getUserName());
+                userDTOS.add(new UserDTO(user, (Long) q.getSingleResult()));
             }
         }finally {
             em.close();

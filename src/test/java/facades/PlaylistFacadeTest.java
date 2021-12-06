@@ -1,6 +1,8 @@
 package facades;
 
+import DTO.CountDTOS.CountDTO;
 import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
+import DTO.UserDTOS.UserDTO;
 import entities.Playlist;
 import entities.Role;
 import entities.User;
@@ -9,10 +11,8 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class PlaylistFacadeTest {
 
@@ -143,5 +143,43 @@ public class PlaylistFacadeTest {
         Assertions.assertEquals(1,myPlaylistDTO.get(0).getUserFollowers());
         Assertions.assertEquals(1,myPlaylistDTO.get(1).getUserFollowers());
 
+    }
+
+    @Test
+    public void testGetAllUsersFromDatabase() {
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        try{
+            userDTOS = facade.getAllUsersFromDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boolean check = false;
+
+        for(UserDTO user: userDTOS) {
+            if(user.getUserName().equals("user1")){
+                check = true;
+                Assertions.assertEquals("user1", user.getUserName());
+            }
+        }
+
+        if(!check){
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    public void testGetCountOfAllUsers() {
+        CountDTO userCount = null;
+
+        try {
+            userCount = facade.getCountOfUsers();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(4, userCount.getUserCount());
     }
 }

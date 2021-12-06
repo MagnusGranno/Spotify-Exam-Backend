@@ -1,6 +1,7 @@
 package rest;
 
 import DTO.CategoryDTOS.ItemsDTO;
+import DTO.CountDTOS.CountDTO;
 import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.TracksDTOS.TrackItemsDTO;
@@ -150,7 +151,7 @@ public class SpotifyResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("users")
-    @RolesAllowed({"user", "admin"})
+//    @RolesAllowed({"user", "admin"})
     public String getAllUsersFromDatabase() throws API_Exception {
         PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
         List<UserDTO> response;
@@ -159,6 +160,22 @@ public class SpotifyResource {
             response = pf.getAllUsersFromDatabase();
         } catch (Exception e) {
             throw new API_Exception("Failed to get all users", 400, e);
+        }
+        return gson.toJson(response);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("usercount")
+//    @RolesAllowed("admin")
+    public String getCountOfAllUsers() throws API_Exception {
+        PlaylistFacade pf = PlaylistFacade.getPlaylistFacade(EMF);
+        CountDTO response;
+
+        try {
+            response = pf.getCountOfUsers();
+        } catch (Exception e) {
+            throw new API_Exception("Failed to get count of all users", 400, e);
         }
         return gson.toJson(response);
     }
