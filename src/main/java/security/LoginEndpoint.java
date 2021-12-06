@@ -136,23 +136,24 @@ public class LoginEndpoint {
 
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     @Path("update/{userName}")
-    @RolesAllowed("admin")
+    @RolesAllowed({"admin","user"})
     public String updateUserFromDatabase(@PathParam("userName") String userName, String jsonString) throws API_Exception {
 
-        String newUserName;
+        String newPassword;
         StatusDTO response;
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            newUserName = json.get("username").getAsString();
+            newPassword = json.get("password").getAsString();
 
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
-            response = USER_FACADE.updateUser(userName, newUserName);
+            response = USER_FACADE.updateUser(userName, newPassword);
 
         } catch (Exception e) {
             throw new API_Exception("Failed to update user", 400, e);

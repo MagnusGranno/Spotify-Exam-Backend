@@ -72,6 +72,7 @@ public class User implements Serializable {
     }
 
 
+
     public String getUserName() {
         return userName;
     }
@@ -85,7 +86,8 @@ public class User implements Serializable {
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        String salt = BCrypt.gensalt();
+        this.userPass = BCrypt.hashpw(userPass, salt);
     }
 
     public List<Playlist> getPlaylistList() {

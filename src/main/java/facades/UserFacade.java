@@ -98,13 +98,13 @@ public class UserFacade {
         return new StatusDTO("Success", userName + " deleted");
     }
 
-    public StatusDTO updateUser(String userName, String newUserName) {
+    public StatusDTO updateUser(String userName, String newPassword) {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
             User user = em.find(User.class, userName);
-            user.setUserName(newUserName);
+            user.setUserPass(newPassword);
             em.merge(user);
             em.getTransaction().commit();
 
@@ -112,6 +112,6 @@ public class UserFacade {
             em.close();
         }
 
-        return new StatusDTO("Success", userName + " changed to " + newUserName);
+        return new StatusDTO("Success", "Password changed on " + userName);
     }
 }
