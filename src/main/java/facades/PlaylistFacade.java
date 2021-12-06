@@ -1,12 +1,12 @@
 package facades;
 
 import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
+import DTO.UserDTOS.UserDTO;
 import callables.Parallel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.Playlist;
 import entities.User;
-import errorhandling.API_Exception;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -96,7 +96,7 @@ public class PlaylistFacade {
         List<MyPlaylistDTO> myPlaylistDTOList = new ArrayList<>();
 
         try {
-            TypedQuery tq = em.createQuery(
+            TypedQuery<Playlist> tq = em.createQuery(
                     "select p from Playlist p order by p.followers desc", Playlist.class);
             tq.setMaxResults(10);
             playlists = tq.getResultList();
@@ -124,4 +124,52 @@ public class PlaylistFacade {
         }
         return myPlaylistDTOList;
     }
+
+    public List<UserDTO> getAllUsersFromDatabase(){
+        EntityManager em = getEntityManager();
+        List<UserDTO> userDTOS = new ArrayList<>();
+        try{
+            TypedQuery<User> tq = em.createQuery("select u from User u",User.class);
+            List<User> users = tq.getResultList();
+            for(User user: users){
+                userDTOS.add(new UserDTO(user));
+            }
+        }finally {
+            em.close();
+        }
+        return userDTOS;
+    }
+
+    public List<MyPlaylistDTO> getFollowedPlaylists(String username) throws IOException {
+        SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
+        sf.getTokenIfNeeded();
+        String accessToken = sf.getAccessToken();
+
+        String browseUrl = "https://api.spotify.com/v1/playlists/";
+        EntityManager em = getEntityManager();
+        User user = em.find(User.class, username);
+
+        List<MyPlaylistDTO> myPlaylistDTOList = new ArrayList<>();
+
+        for(Playlist pl : user.getPlaylistList()) {
+            URL url = new URL(browseUrl + pl.getSpotifyId());
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod("GET");
+            http.setRequestProperty("content-type", "application/json");
+            http.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
+            String currentLine = Lines.readLine();
+            String response = "";
+            while (currentLine != null) {
+                response += currentLine;
+                currentLine = Lines.readLine();
+            }
+            MyPlaylistDTO myPlaylistDTO = gson.fromJson(response, MyPlaylistDTO.class);
+            myPlaylistDTO.moveImageUrl();
+            myPlaylistDTOList.add(myPlaylistDTO);
+        }
+        return myPlaylistDTOList;
+    }
+
 }

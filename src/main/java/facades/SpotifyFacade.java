@@ -170,35 +170,7 @@ public class SpotifyFacade {
         return trackItemsDTO.getItems();
     }
 
-    public List<MyPlaylistDTO> getFollowedPlaylists(String username) throws IOException {
-        getTokenIfNeeded();
 
-        String browseUrl = "https://api.spotify.com/v1/playlists/";
-        EntityManager em = EMF.createEntityManager();
-        User user = em.find(User.class, username);
-
-        List<MyPlaylistDTO> myPlaylistDTOList = new ArrayList<>();
-
-        for(Playlist pl : user.getPlaylistList()) {
-            URL url = new URL(browseUrl + pl.getSpotifyId());
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            http.setRequestMethod("GET");
-            http.setRequestProperty("content-type", "application/json");
-            http.setRequestProperty("Authorization", "Bearer " +accessToken);
-
-            BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
-            String currentLine = Lines.readLine();
-            String response = "";
-            while (currentLine != null) {
-                response += currentLine;
-                currentLine = Lines.readLine();
-            }
-            MyPlaylistDTO myPlaylistDTO = gson.fromJson(response, MyPlaylistDTO.class);
-            myPlaylistDTO.moveImageUrl();
-            myPlaylistDTOList.add(myPlaylistDTO);
-        }
-        return myPlaylistDTOList;
-    }
 
 
 
