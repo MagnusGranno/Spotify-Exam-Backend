@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class HttpUtils {
 
-    public static String fetchData(String _url) throws MalformedURLException, IOException {
+    public static String fetchData(String _url) throws IOException {
         URL url = new URL(_url);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");

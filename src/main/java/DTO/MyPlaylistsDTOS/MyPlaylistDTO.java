@@ -19,8 +19,8 @@ public class MyPlaylistDTO {
         return userFollowers;
     }
 
-    public void moveImageUrl(){
-        if(!images.isEmpty()){
+    public void moveImageUrl() {
+        if (!images.isEmpty()) {
             this.imageUrl = images.get(0).getUrl();
             this.images = null;
         }

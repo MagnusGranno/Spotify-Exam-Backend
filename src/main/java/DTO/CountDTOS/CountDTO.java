@@ -2,9 +2,9 @@ package DTO.CountDTOS;
 
 public class CountDTO {
 
-    private Long userCount;
+    private final Long userCount;
 
-    public CountDTO(Long count){
+    public CountDTO(Long count) {
         this.userCount = count;
     }
 

@@ -3,7 +3,6 @@ package facades;
 
 import DTO.CategoryDTOS.CategoryObjectDTO;
 import DTO.CategoryDTOS.ItemsDTO;
-import DTO.MyPlaylistsDTOS.MyPlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistDTO;
 import DTO.PlaylistsDTOS.PlaylistObjectDTO;
 import DTO.PlaylistsDTOS.PlaylistsDTO;
@@ -12,20 +11,18 @@ import DTO.TracksDTOS.TracksObjectDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import entities.Playlist;
-import entities.User;
 import utils.EMF_Creator;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,7 +32,7 @@ public class SpotifyFacade {
     private Instant tokenExpireTime;
     private String accessToken;
     private String refreshToken;
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
 
 
@@ -92,7 +89,7 @@ public class SpotifyFacade {
     }
 
     public void getTokenIfNeeded() throws IOException {
-        if(tokenExpireTime == null || tokenExpireTime.isBefore(Instant.now())){
+        if (tokenExpireTime == null || tokenExpireTime.isBefore(Instant.now())) {
             getTokenFromSpotify();
         }
     }
@@ -105,7 +102,7 @@ public class SpotifyFacade {
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("GET");
         http.setRequestProperty("content-type", "application/json");
-        http.setRequestProperty("Authorization", "Bearer " +accessToken);
+        http.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
         String currentLine = Lines.readLine();
@@ -119,7 +116,7 @@ public class SpotifyFacade {
         return gson.fromJson(response, CategoryObjectDTO.class).getCategories().getItems();
     }
 
-    public List<PlaylistDTO> getPlaylists (String genre) throws IOException {
+    public List<PlaylistDTO> getPlaylists(String genre) throws IOException {
         getTokenIfNeeded();
         String browseUrl = "https://api.spotify.com/v1/browse/categories/" + genre + "/playlists";
 
@@ -127,7 +124,7 @@ public class SpotifyFacade {
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("GET");
         http.setRequestProperty("content-type", "application/json");
-        http.setRequestProperty("Authorization", "Bearer " +accessToken);
+        http.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
         String currentLine = Lines.readLine();
@@ -142,6 +139,7 @@ public class SpotifyFacade {
 
         return playlistDTO.getPlaylistDTO();
     }
+
     public List<TrackItemsDTO> getTracks(String playlistId) throws IOException {
         getTokenIfNeeded();
         String browseUrl = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?offset=0&limit=20";
@@ -150,7 +148,7 @@ public class SpotifyFacade {
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("GET");
         http.setRequestProperty("content-type", "application/json");
-        http.setRequestProperty("Authorization", "Bearer " +accessToken);
+        http.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         BufferedReader Lines = new BufferedReader(new InputStreamReader(http.getInputStream()));
         String currentLine = Lines.readLine();
@@ -166,13 +164,8 @@ public class SpotifyFacade {
         trackItemsDTO.moveDataToTrackItem();
 
 
-
         return trackItemsDTO.getItems();
     }
-
-
-
-
 
 
 }

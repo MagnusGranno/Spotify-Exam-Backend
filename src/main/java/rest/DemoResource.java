@@ -17,18 +17,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author lam@cphbusiness.dk
  */
 @Path("info")
 public class DemoResource {
-    
+
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     @Context
     private UriInfo context;
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 //    private Gson gson = new Gson();
 
     @Context
@@ -48,7 +47,7 @@ public class DemoResource {
 
         EntityManager em = EMF.createEntityManager();
         try {
-            TypedQuery<User> query = em.createQuery ("select u from User u", User.class);
+            TypedQuery<User> query = em.createQuery("select u from User u", User.class);
             List<User> users = query.getResultList();
             return "[" + users.size() + "]";
         } finally {

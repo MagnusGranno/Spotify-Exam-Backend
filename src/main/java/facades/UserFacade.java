@@ -6,12 +6,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.Role;
 import entities.User;
+import security.errorhandling.AuthenticationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
-
-import security.errorhandling.AuthenticationException;
 
 /**
  * @author lam@cphbusiness.dk
@@ -20,7 +18,7 @@ public class UserFacade {
 
     private static EntityManagerFactory emf;
     private static UserFacade instance;
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private UserFacade() {
     }
@@ -64,8 +62,7 @@ public class UserFacade {
                 user.addRole(userRole);
                 em.persist(user);
                 em.getTransaction().commit();
-            }
-            else {
+            } else {
                 Role newUserRole = new Role("user");
                 em.getTransaction().begin();
                 em.persist(newUserRole);
@@ -79,8 +76,7 @@ public class UserFacade {
             createUserDTO.setStatus("failed");
             createUserDTO.setMessage(username + " already exists!");
             return gson.toJson(createUserDTO);
-        } finally
-         {
+        } finally {
             em.close();
         }
         createUserDTO.setStatus("success");
@@ -100,5 +96,22 @@ public class UserFacade {
             em.close();
         }
         return new StatusDTO("Success", userName + " deleted");
+    }
+
+    public StatusDTO updateUser(String userName, String newUserName) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            user.setUserName(newUserName);
+            em.merge(user);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+
+        return new StatusDTO("Success", userName + " changed to " + newUserName);
     }
 }

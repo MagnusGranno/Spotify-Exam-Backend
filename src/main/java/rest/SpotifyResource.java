@@ -18,7 +18,6 @@ import utils.EMF_Creator;
 
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PostRemove;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -28,7 +27,7 @@ import java.util.List;
 public class SpotifyResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 //    @GET
 //    @Produces

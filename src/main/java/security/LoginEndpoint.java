@@ -12,24 +12,22 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import facades.PlaylistFacade;
+import entities.User;
+import errorhandling.API_Exception;
+import errorhandling.GenericExceptionMapper;
 import facades.UserFacade;
+import security.errorhandling.AuthenticationException;
+import utils.EMF_Creator;
+
+import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import entities.User;
-import errorhandling.API_Exception;
-
-import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import security.errorhandling.AuthenticationException;
-import errorhandling.GenericExceptionMapper;
-import javax.persistence.EntityManagerFactory;
-import utils.EMF_Creator;
-import utils.SetupTestUsers;
 
 @Path("login")
 public class LoginEndpoint {
@@ -50,7 +48,7 @@ public class LoginEndpoint {
             username = json.get("username").getAsString();
             password = json.get("password").getAsString();
         } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
@@ -110,12 +108,12 @@ public class LoginEndpoint {
             username = json.get("username").getAsString();
             password = json.get("password").getAsString();
 
-        } catch(Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
-            return USER_FACADE.createUser(username,password);
+            return USER_FACADE.createUser(username, password);
         } catch (Exception e) {
             throw new API_Exception("Malformed Json Suplied", 400, e);
         }
@@ -133,6 +131,33 @@ public class LoginEndpoint {
         } catch (Exception e) {
             throw new API_Exception("Failed to delete user", 400, e);
         }
+        return gson.toJson(response);
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("update/{userName}")
+    @RolesAllowed("admin")
+    public String updateUserFromDatabase(@PathParam("userName") String userName, String jsonString) throws API_Exception {
+
+        String newUserName;
+        StatusDTO response;
+
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            newUserName = json.get("username").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+
+        try {
+            response = USER_FACADE.updateUser(userName, newUserName);
+
+        } catch (Exception e) {
+            throw new API_Exception("Failed to update user", 400, e);
+        }
+
         return gson.toJson(response);
     }
 }

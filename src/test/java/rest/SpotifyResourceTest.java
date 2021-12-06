@@ -65,7 +65,7 @@ public class SpotifyResourceTest {
 
     @Test
     public void testSizeOfBrowseResponse() {
-       Response response = given()
+        Response response = given()
                 .contentType("application/json")
                 .when()
                 .get("/spotify/browse").then()
@@ -79,7 +79,7 @@ public class SpotifyResourceTest {
 
     @Test
     public void testIsArrayOfBrowseWithGenreResponse() {
-       Response response = given()
+        Response response = given()
                 .contentType("application/json")
                 .when()
                 .get("/spotify/browse/gaming").then()
@@ -92,7 +92,7 @@ public class SpotifyResourceTest {
 
     @Test
     public void testIsArrayOfTracks() {
-       Response response = given()
+        Response response = given()
                 .contentType("application/json")
                 .when()
                 .get("/spotify/playlist/37i9dQZF1DXdfOcg1fm0VG").then()
@@ -128,7 +128,7 @@ public class SpotifyResourceTest {
     }
 
     @Test
-    public void testGetMostPopularPlaylists () {
+    public void testGetMostPopularPlaylists() {
         Response response = given()
                 .contentType("application/json")
                 .when()

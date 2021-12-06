@@ -11,8 +11,8 @@ public class PlaylistDTO {
     private String imageUrl;
 
 
-    public void moveImageUrl(){
-        if(!images.isEmpty()){
+    public void moveImageUrl() {
+        if (!images.isEmpty()) {
             this.imageUrl = images.get(0).getUrl();
         }
     }

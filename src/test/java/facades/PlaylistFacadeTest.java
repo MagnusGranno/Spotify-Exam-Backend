@@ -6,7 +6,10 @@ import DTO.UserDTOS.UserDTO;
 import entities.Playlist;
 import entities.Role;
 import entities.User;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
@@ -19,7 +22,8 @@ public class PlaylistFacadeTest {
     private static EntityManagerFactory emf;
     private static PlaylistFacade facade;
 
-    public PlaylistFacadeTest() {}
+    public PlaylistFacadeTest() {
+    }
 
     @BeforeAll
     public static void setUpClass() {
@@ -41,7 +45,6 @@ public class PlaylistFacadeTest {
             em.createNamedQuery("Playlist.deleteAllRows").executeUpdate();
             em.createNamedQuery("Playlist.resetAutoIncrement").executeUpdate();
             em.getTransaction().commit();
-
 
 
             User user1 = new User("user1", "kode123");
@@ -140,8 +143,8 @@ public class PlaylistFacadeTest {
         } finally {
             em.close();
         }
-        Assertions.assertEquals(1,myPlaylistDTO.get(0).getUserFollowers());
-        Assertions.assertEquals(1,myPlaylistDTO.get(1).getUserFollowers());
+        Assertions.assertEquals(1, myPlaylistDTO.get(0).getUserFollowers());
+        Assertions.assertEquals(1, myPlaylistDTO.get(1).getUserFollowers());
 
     }
 
@@ -150,7 +153,7 @@ public class PlaylistFacadeTest {
 
         List<UserDTO> userDTOS = new ArrayList<>();
 
-        try{
+        try {
             userDTOS = facade.getAllUsersFromDatabase();
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,14 +161,14 @@ public class PlaylistFacadeTest {
 
         boolean check = false;
 
-        for(UserDTO user: userDTOS) {
-            if(user.getUserName().equals("user1")){
+        for (UserDTO user : userDTOS) {
+            if (user.getUserName().equals("user1")) {
                 check = true;
                 Assertions.assertEquals("user1", user.getUserName());
             }
         }
 
-        if(!check){
+        if (!check) {
             Assertions.fail();
         }
     }
@@ -176,7 +179,7 @@ public class PlaylistFacadeTest {
 
         try {
             userCount = facade.getCountOfUsers();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

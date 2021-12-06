@@ -20,7 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,13 +29,13 @@ public class PlaylistFacade {
 
     private static PlaylistFacade instance;
     private static EntityManagerFactory emf;
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     //Private Constructor to ensure Singleton
-    private PlaylistFacade() {}
+    private PlaylistFacade() {
+    }
 
     /**
-     *
      * @param _emf
      * @return an instance of this facade class.
      */
@@ -52,7 +51,7 @@ public class PlaylistFacade {
         return emf.createEntityManager();
     }
 
-    public void savePlaylistOnUser(String spotifyId, String userName){
+    public void savePlaylistOnUser(String spotifyId, String userName) {
         EntityManager em = getEntityManager();
 
         try {
@@ -60,9 +59,9 @@ public class PlaylistFacade {
             User user = em.find(User.class, userName);
             Playlist playlist = null;
 
-            if(em.find(Playlist.class,spotifyId) != null){
+            if (em.find(Playlist.class, spotifyId) != null) {
                 playlist = em.find(Playlist.class, spotifyId);
-            } else{
+            } else {
                 playlist = new Playlist(spotifyId);
                 em.persist(playlist);
             }
@@ -89,7 +88,7 @@ public class PlaylistFacade {
         }
     }
 
-    public List<MyPlaylistDTO> getMostPopularPlaylists () throws IOException, ExecutionException, InterruptedException {
+    public List<MyPlaylistDTO> getMostPopularPlaylists() throws IOException, ExecutionException, InterruptedException {
         SpotifyFacade sf = SpotifyFacade.getSpotifyFacade();
         sf.getTokenIfNeeded();
         String accessToken = sf.getAccessToken();
@@ -135,23 +134,23 @@ public class PlaylistFacade {
             TypedQuery<Long> q = em.createQuery("select count(u) from User u", Long.class);
             countDTO = new CountDTO(q.getSingleResult());
         } finally {
-           em.close();
+            em.close();
         }
         return countDTO;
     }
 
-    public List<UserDTO> getAllUsersFromDatabase(){
+    public List<UserDTO> getAllUsersFromDatabase() {
         EntityManager em = getEntityManager();
         List<UserDTO> userDTOS = new ArrayList<>();
-        try{
-            TypedQuery<User> tq = em.createQuery("select u from User u",User.class);
+        try {
+            TypedQuery<User> tq = em.createQuery("select u from User u", User.class);
             List<User> users = tq.getResultList();
-            for(User user: users){
+            for (User user : users) {
                 Query q = em.createQuery("select count(user.playlistList) from User user where user.userName = :userName");
-                q.setParameter("userName",user.getUserName());
+                q.setParameter("userName", user.getUserName());
                 userDTOS.add(new UserDTO(user, (Long) q.getSingleResult()));
             }
-        }finally {
+        } finally {
             em.close();
         }
         return userDTOS;
@@ -168,7 +167,7 @@ public class PlaylistFacade {
 
         List<MyPlaylistDTO> myPlaylistDTOList = new ArrayList<>();
 
-        for(Playlist pl : user.getPlaylistList()) {
+        for (Playlist pl : user.getPlaylistList()) {
             URL url = new URL(browseUrl + pl.getSpotifyId());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod("GET");

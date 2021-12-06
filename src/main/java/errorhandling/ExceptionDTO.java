@@ -6,8 +6,9 @@ public class ExceptionDTO {
         this.code = code;
         this.message = description;
     }
-    private int code;
-    private String message;
+
+    private final int code;
+    private final String message;
 
     public int getCode() {
         return code;

@@ -1,13 +1,11 @@
 package entities;
 
-import java.io.Serializable;
-import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- *
  * @author Plaul
  */
 @Entity
@@ -22,7 +20,7 @@ public class Role implements Serializable {
     @NotNull
     @Column(name = "role_name", length = 20)
     private String roleName;
-    
+
     @ManyToMany(mappedBy = "roleList")
     private List<User> userList;
 
@@ -47,5 +45,5 @@ public class Role implements Serializable {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
-    }   
+    }
 }
