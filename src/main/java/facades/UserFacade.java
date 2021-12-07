@@ -2,6 +2,7 @@ package facades;
 
 import DTO.StatusDTOS.StatusDTO;
 import DTO.UserDTOS.CreateUserDTO;
+import DTO.UserDTOS.UserDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.Role;
@@ -10,6 +11,9 @@ import security.errorhandling.AuthenticationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lam@cphbusiness.dk
@@ -113,5 +117,25 @@ public class UserFacade {
         }
 
         return new StatusDTO("Success", "Password changed on " + userName);
+    }
+
+    public List<UserDTO> partialUsernameSearch(String userName) {
+        EntityManager em = emf.createEntityManager();
+        List<User> users;
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        try {
+            TypedQuery<User> tq = em.createQuery("select u from User u where u.userName like :username",User.class);
+            tq.setParameter("username","%" + userName + "%");
+            users = tq.getResultList();
+        } finally {
+            em.close();
+        }
+
+        for (User user: users) {
+            userDTOS.add(new UserDTO(user));
+        }
+
+        return userDTOS;
     }
 }
