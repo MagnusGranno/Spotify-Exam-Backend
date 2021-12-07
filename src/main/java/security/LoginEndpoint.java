@@ -1,6 +1,7 @@
 package security;
 
 import DTO.StatusDTOS.StatusDTO;
+import DTO.UserDTOS.UserDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -159,6 +160,21 @@ public class LoginEndpoint {
             throw new API_Exception("Failed to update user", 400, e);
         }
 
+        return gson.toJson(response);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("search/{userName}")
+    public String partialUsernameSearch(@PathParam("userName") String userName) throws API_Exception {
+
+        List<UserDTO> response;
+
+        try {
+            response = USER_FACADE.partialUsernameSearch(userName);
+        } catch(Exception e) {
+            throw new API_Exception("Failed to find user", 400, e);
+        }
         return gson.toJson(response);
     }
 }

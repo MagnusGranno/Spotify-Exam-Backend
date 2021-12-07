@@ -12,6 +12,11 @@ public class UserDTO {
         this.playlistCount = playlistCount;
     }
 
+    public UserDTO(User user) {
+        this.userName = user.getUserName();
+        this.playlistCount = null;
+    }
+
     public String getUserName() {
         return userName;
     }
